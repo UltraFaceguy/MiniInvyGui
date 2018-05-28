@@ -1,0 +1,12 @@
+name: MiniInvyGui
+version: ${project.version}
+main: me.faceguy.mini.MiniInvyGui
+depend: [Facecore]
+
+commands:
+  minigui:
+    aliases: [mig]
+
+permissions:
+  mini.invy.admin:
+      default: false

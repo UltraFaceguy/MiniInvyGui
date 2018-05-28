@@ -1,0 +1,66 @@
+version: "0.0.1"
+
+icons:
+  top-left:
+    icon: APPLE
+    quantity: 1
+    name: '&csteel beams'
+    sound-effect: ENTITY_DANK_MEME
+    sound-volume: 1.0
+    sound-pitch: 1.0
+    lore:
+    - '&7jet fuel'
+    - '&7can''t melt'
+    player-commands:
+    - 'me is a dummy'
+    - 'broadcast Hey! %player% is a dingus!'
+    console-commands:
+    - 'kill %player%'
+  top-right:
+    icon: APPLE
+    quantity: 1
+    name: '&csteel beams'
+    lore:
+    - '&7jet fuel'
+    - '&7can''t melt'
+    player-commands:
+    - 'me is a dummy'
+    - 'broadcast Hey! %player% is a dingus!'
+    console-commands:
+    - 'kill %player%'
+  bottom-left:
+    icon: APPLE
+    quantity: 1
+    name: '&csteel beams'
+    lore:
+    - '&7jet fuel'
+    - '&7can''t melt'
+    player-commands:
+    - 'me is a dummy'
+    - 'broadcast Hey! %player% is a dingus!'
+    console-commands:
+    - 'kill %player%'
+  bottom-right:
+    icon: APPLE
+    quantity: 1
+    name: '&csteel beams'
+    lore:
+    - '&7jet fuel'
+    - '&7can''t melt'
+    player-commands:
+    - 'me is a dummy'
+    - 'broadcast Hey! %player% is a dingus!'
+    console-commands:
+    - 'kill %player%'
+  aux:
+    icon: APPLE
+    quantity: 1
+    name: '&csteel beams'
+    lore:
+    - '&7jet fuel'
+    - '&7can''t melt'
+    player-commands:
+    - 'me is a dummy'
+    - 'broadcast Hey! %player% is a dingus!'
+    console-commands:
+    - 'kill %player%'
