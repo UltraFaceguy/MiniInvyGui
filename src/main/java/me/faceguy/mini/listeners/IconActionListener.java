@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -23,19 +24,18 @@ public class IconActionListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onItemPickup(final EntityPickupItemEvent event) {
-    if (event.getEntity() instanceof Player && ((Player) event.getEntity()).getGameMode() == GameMode.SURVIVAL) {
-      plugin.getPacketUtil().sendCraftGridPackets((Player) event.getEntity());
+    if (!(event.getEntity() instanceof Player)) {
+      return;
     }
+    if (((Player) event.getEntity()).getGameMode() == GameMode.SURVIVAL) {
+      return;
+    }
+    sendUpdate((Player) event.getEntity());
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onRespawn(final PlayerRespawnEvent event) {
-    Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-      @Override
-      public void run() {
-        plugin.getPacketUtil().sendCraftGridPackets(event.getPlayer());
-      }
-    }, 2L);
+    sendUpdate(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
@@ -43,25 +43,28 @@ public class IconActionListener implements Listener {
     if (event.getPlayer().getGameMode() != GameMode.SURVIVAL) {
       return;
     }
-    Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-      @Override
-      public void run() {
-        plugin.getPacketUtil().sendCraftGridPackets((Player) event.getPlayer());
-      }
-    }, 2L);
+    sendUpdate((Player) event.getPlayer());
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onInvyClick(final InventoryClickEvent event) {
+    if (!(event.getInventory().getHolder() instanceof Player)) {
+      return;
+    }
+    Player player = (Player) event.getInventory().getHolder();
+    if (player.getGameMode() != GameMode.SURVIVAL) {
+      return;
+    }
+    sendUpdate(player);
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onTeleport(final PlayerTeleportEvent event) {
-    if (event.getPlayer().hasMetadata("NPC") || event.getPlayer().getGameMode() != GameMode.SURVIVAL) {
+    if (event.getPlayer().hasMetadata("NPC")
+        || event.getPlayer().getGameMode() != GameMode.SURVIVAL) {
       return;
     }
-    Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-      @Override
-      public void run() {
-        plugin.getPacketUtil().sendCraftGridPackets(event.getPlayer());
-      }
-    }, 2L);
+    sendUpdate(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
@@ -69,11 +72,11 @@ public class IconActionListener implements Listener {
     if (event.getPlayer().getGameMode() != GameMode.SURVIVAL) {
       return;
     }
-    Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-      @Override
-      public void run() {
-        plugin.getPacketUtil().sendCraftGridPackets(event.getPlayer());
-      }
-    }, 2L);
+    sendUpdate(event.getPlayer());
+  }
+
+  private void sendUpdate(Player player) {
+    Bukkit.getScheduler().runTaskLater(plugin,
+        () -> plugin.getPacketManager().sendCraftGridPackets(player), 2L);
   }
 }

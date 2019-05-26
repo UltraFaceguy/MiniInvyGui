@@ -18,7 +18,7 @@ public class GameModeListener implements Listener {
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onGameModeChange(final PlayerGameModeChangeEvent event) {
     if (event.getNewGameMode() == GameMode.CREATIVE) {
-      plugin.getPacketUtil().sendBlankGridPackets(event.getPlayer());
+      plugin.getPacketManager().sendBlankGridPackets(event.getPlayer());
     }
   }
 }

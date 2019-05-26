@@ -16,7 +16,7 @@ public class IconPacketSendTask extends BukkitRunnable {
   @Override
   public void run() {
     for (Player p : Bukkit.getOnlinePlayers()) {
-      plugin.getPacketUtil().sendCraftGridPackets(p);
+      plugin.getPacketManager().sendCraftGridPackets(p);
     }
   }
 }

@@ -11,7 +11,7 @@ import me.faceguy.mini.listeners.IconActionListener;
 import me.faceguy.mini.listeners.IconClickListener;
 import me.faceguy.mini.managers.ItemManager;
 import me.faceguy.mini.tasks.IconPacketSendTask;
-import me.faceguy.mini.utils.PacketUtil;
+import me.faceguy.mini.managers.PacketManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import se.ranzdo.bukkit.methodcommand.CommandHandler;
@@ -21,7 +21,7 @@ public class MiniInvyGui extends FacePlugin {
   private MasterConfiguration settings;
   private VersionedSmartYamlConfiguration configYAML;
   private ItemManager itemManager;
-  private PacketUtil packetUtil;
+  private PacketManager packetManager;
   private IconPacketSendTask packetTask;
   private CommandHandler commandHandler;
 
@@ -35,13 +35,13 @@ public class MiniInvyGui extends FacePlugin {
     settings = MasterConfiguration.loadFromFiles(configYAML);
 
     itemManager = new ItemManager(this);
-    packetUtil = new PacketUtil(this);
+    packetManager = new PacketManager(itemManager);
 
     packetTask = new IconPacketSendTask(this);
 
     packetTask.runTaskTimer(this,
-        20L * 5, // Start timer after 5s
-        20L * 4 // Run it every 4s after
+        20L * 10, // Start timer after 10s
+        20L * 5 // Run it every 5s after
     );
 
     commandHandler = new CommandHandler(this);
@@ -58,7 +58,7 @@ public class MiniInvyGui extends FacePlugin {
     HandlerList.unregisterAll(this);
     settings = null;
     itemManager = null;
-    packetUtil = null;
+    packetManager = null;
     packetTask = null;
     configYAML = null;
     commandHandler = null;
@@ -72,7 +72,7 @@ public class MiniInvyGui extends FacePlugin {
     return itemManager;
   }
 
-  public PacketUtil getPacketUtil() {
-    return packetUtil;
+  public PacketManager getPacketManager() {
+    return packetManager;
   }
 }
