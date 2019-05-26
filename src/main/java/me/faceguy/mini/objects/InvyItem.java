@@ -1,14 +1,14 @@
 package me.faceguy.mini.objects;
 
-import io.pixeloutlaw.minecraft.spigot.hilt.HiltItemStack;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class InvyItem {
 
-  private HiltItemStack itemIcon;
+  private ItemStack itemIcon;
   private Sound soundEffect;
   private float soundVolume;
   private float soundPitch;
@@ -29,11 +29,11 @@ public class InvyItem {
     }
   }
 
-  public HiltItemStack getItemIcon() {
+  public ItemStack getItemIcon() {
     return itemIcon;
   }
 
-  public void setItemIcon(HiltItemStack itemIcon) {
+  public void setItemIcon(ItemStack itemIcon) {
     this.itemIcon = itemIcon;
   }
 

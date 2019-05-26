@@ -1,14 +1,14 @@
 package me.faceguy.mini.managers;
 
 import com.tealcube.minecraft.bukkit.TextUtils;
-import io.pixeloutlaw.minecraft.spigot.hilt.HiltItemStack;
+import io.pixeloutlaw.minecraft.spigot.hilt.ItemStackExtensionsKt;
 import java.util.List;
 import me.faceguy.mini.MiniInvyGui;
 import me.faceguy.mini.objects.InvyItem;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.ItemStack;
 
 public class ItemManager {
 
@@ -49,29 +49,35 @@ public class ItemManager {
   }
 
   private InvyItem generateItem(String itemIdentifier) {
-    Material material = Material.getMaterial(plugin.getSettings().getString("config.icons." + itemIdentifier + ".icon"));
+    Material material = Material
+        .getMaterial(plugin.getSettings().getString("config.icons." + itemIdentifier + ".icon"));
     int amount = plugin.getSettings().getInt("config.icons." + itemIdentifier + ".amount", 1);
-    HiltItemStack item = new HiltItemStack(material, amount);
-    item.setName(TextUtils.color(plugin.getSettings().getString("config.icons." + itemIdentifier + ".name")));
+    ItemStack item = new ItemStack(material, amount);
+    ItemStackExtensionsKt.setDisplayName(item, TextUtils
+        .color(plugin.getSettings().getString("config.icons." + itemIdentifier + ".name")));
 
-    List<String> lore = TextUtils.color(plugin.getSettings().getStringList("config.icons." + itemIdentifier + ".lore"));
-    item.setLore(lore);
-
-    ItemMeta meta = item.getItemMeta();
-    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS);
-    item.setItemMeta(meta);
+    List<String> lore = TextUtils
+        .color(plugin.getSettings().getStringList("config.icons." + itemIdentifier + ".lore"));
+    ItemStackExtensionsKt.setLore(item, lore);
+    ItemStackExtensionsKt.addItemFlags(item, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS,
+        ItemFlag.HIDE_POTION_EFFECTS);
 
     InvyItem invyItem = new InvyItem();
     invyItem.setItemIcon(item);
 
-    String sound = plugin.getSettings().getString("config.icons." + itemIdentifier + ".sound-effect", null);
+    String sound = plugin.getSettings()
+        .getString("config.icons." + itemIdentifier + ".sound-effect", null);
     invyItem.setSoundEffect(sound != null ? Sound.valueOf(sound) : null);
 
-    invyItem.setSoundVolume((float) plugin.getSettings().getDouble("config.icons." + itemIdentifier + ".sound-volume", 1));
-    invyItem.setSoundPitch((float) plugin.getSettings().getDouble("config.icons." + itemIdentifier + ".sound-pitch", 1));
+    invyItem.setSoundVolume((float) plugin.getSettings()
+        .getDouble("config.icons." + itemIdentifier + ".sound-volume", 1));
+    invyItem.setSoundPitch((float) plugin.getSettings()
+        .getDouble("config.icons." + itemIdentifier + ".sound-pitch", 1));
 
-    invyItem.setPlayerCommandList(plugin.getSettings().getStringList("config.icons." + itemIdentifier + ".player-commands"));
-    invyItem.setConsoleCommandList(plugin.getSettings().getStringList("config.icons." + itemIdentifier + ".console-commands"));
+    invyItem.setPlayerCommandList(
+        plugin.getSettings().getStringList("config.icons." + itemIdentifier + ".player-commands"));
+    invyItem.setConsoleCommandList(
+        plugin.getSettings().getStringList("config.icons." + itemIdentifier + ".console-commands"));
 
     return invyItem;
   }

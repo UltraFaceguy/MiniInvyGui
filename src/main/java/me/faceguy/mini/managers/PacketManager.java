@@ -1,11 +1,12 @@
 package me.faceguy.mini.managers;
 
+import io.pixeloutlaw.minecraft.spigot.hilt.ItemStackExtensionsKt;
 import java.util.List;
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.minecraft.server.v1_12_R1.PacketPlayOutSetSlot;
+import net.minecraft.server.v1_14_R1.PacketPlayOutSetSlot;
 import org.bukkit.GameMode;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -49,10 +50,9 @@ public class PacketManager {
 
   private PacketPlayOutSetSlot buildPacket(Player player, int slot, ItemStack stack) {
     ItemStack sentStack = stack.clone();
-    ItemMeta meta = sentStack.getItemMeta();
-    List<String> lore = meta.getLore();
+    List<String> lore = ItemStackExtensionsKt.getLore(sentStack);
     lore = PlaceholderAPI.setPlaceholders(player, lore);
-    sentStack.setLore(lore);
+    ItemStackExtensionsKt.setLore(sentStack, lore);
     return new PacketPlayOutSetSlot(0, slot, CraftItemStack.asNMSCopy(sentStack));
   }
 }
