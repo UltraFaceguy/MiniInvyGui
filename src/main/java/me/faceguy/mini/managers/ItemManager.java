@@ -1,10 +1,12 @@
 package me.faceguy.mini.managers;
 
 import com.tealcube.minecraft.bukkit.TextUtils;
+import com.tealcube.minecraft.bukkit.shade.apache.commons.lang3.StringUtils;
 import io.pixeloutlaw.minecraft.spigot.hilt.ItemStackExtensionsKt;
 import java.util.List;
 import me.faceguy.mini.MiniInvyGui;
 import me.faceguy.mini.objects.InvyItem;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemFlag;
@@ -49,10 +51,24 @@ public class ItemManager {
   }
 
   private InvyItem generateItem(String itemIdentifier) {
-    Material material = Material
-        .getMaterial(plugin.getSettings().getString("config.icons." + itemIdentifier + ".icon"));
-    int amount = plugin.getSettings().getInt("config.icons." + itemIdentifier + ".amount", 1);
-    ItemStack item = new ItemStack(material, amount);
+    String headString = plugin.getSettings().getString("config.icons." + itemIdentifier + ".head");
+    ItemStack item;
+    Bukkit.getLogger().info("Loading slot: " + itemIdentifier);
+    if (StringUtils.isNotBlank(headString) && MiniInvyGui.HEAD_API != null) {
+      try {
+        item = MiniInvyGui.HEAD_API.getItemHead(headString);
+        Bukkit.getLogger().info(" - Using head: " + headString);
+      } catch (Exception e) {
+        item = MiniInvyGui.HEAD_API.getRandomHead();
+        Bukkit.getLogger().info(" - Head not found. Using random head");
+      }
+    } else {
+      Material material = Material
+          .valueOf(plugin.getSettings().getString("config.icons." + itemIdentifier + ".icon"));
+      Bukkit.getLogger().info(" - Using material: " + material);
+      int amount = plugin.getSettings().getInt("config.icons." + itemIdentifier + ".amount", 1);
+      item = new ItemStack(material, amount);
+    }
     ItemStackExtensionsKt.setDisplayName(item, TextUtils
         .color(plugin.getSettings().getString("config.icons." + itemIdentifier + ".name")));
 

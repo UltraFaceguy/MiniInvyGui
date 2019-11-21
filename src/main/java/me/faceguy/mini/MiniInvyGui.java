@@ -5,6 +5,7 @@ import io.pixeloutlaw.minecraft.spigot.config.MasterConfiguration;
 import io.pixeloutlaw.minecraft.spigot.config.VersionedConfiguration;
 import io.pixeloutlaw.minecraft.spigot.config.VersionedSmartYamlConfiguration;
 import java.io.File;
+import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.faceguy.mini.commands.MiniCommand;
 import me.faceguy.mini.listeners.GameModeListener;
 import me.faceguy.mini.listeners.IconActionListener;
@@ -25,6 +26,8 @@ public class MiniInvyGui extends FacePlugin {
   private IconPacketSendTask packetTask;
   private CommandHandler commandHandler;
 
+  public static HeadDatabaseAPI HEAD_API;
+
   @Override
   public void enable() {
     configYAML = new VersionedSmartYamlConfiguration(new File(getDataFolder(), "config.yml"),
@@ -33,6 +36,14 @@ public class MiniInvyGui extends FacePlugin {
       getLogger().info("Updating config.yml");
     }
     settings = MasterConfiguration.loadFromFiles(configYAML);
+
+    if (Bukkit.getPluginManager().getPlugin("HeadDatabase") != null) {
+      HEAD_API = new HeadDatabaseAPI();
+      getLogger().info("HeadDatbase found. Head support GET!");
+    } else {
+      HEAD_API = null;
+      getLogger().info("HeadDatbase not found. No head support");
+    }
 
     itemManager = new ItemManager(this);
     packetManager = new PacketManager(itemManager);
@@ -45,7 +56,6 @@ public class MiniInvyGui extends FacePlugin {
     );
 
     commandHandler = new CommandHandler(this);
-
     commandHandler.registerCommands(new MiniCommand(this));
 
     Bukkit.getPluginManager().registerEvents(new IconActionListener(this), this);

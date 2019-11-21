@@ -2,6 +2,8 @@ name: MiniInvyGui
 version: ${project.version}
 main: me.faceguy.mini.MiniInvyGui
 depend: [Facecore, PlaceholderAPI]
+softdepend: [HeadDatabase]
+api-version: 1.14
 
 commands:
   minigui:

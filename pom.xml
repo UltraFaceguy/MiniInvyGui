@@ -28,7 +28,7 @@
   <parent>
     <groupId>io.pixeloutlaw</groupId>
     <artifactId>spigot-plugin-parent</artifactId>
-    <version>1.14.1.0</version>
+    <version>1.14.4.2</version>
   </parent>
 
   <artifactId>MiniInvyGui</artifactId>
@@ -41,10 +41,6 @@
 
   <repositories>
     <repository>
-      <id>dmulloy2-repo</id>
-      <url>http://repo.dmulloy2.net/nexus/repository/public/</url>
-    </repository>
-    <repository>
       <id>placeholderapi</id>
       <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
     </repository>
@@ -54,7 +50,7 @@
     <dependency>
       <groupId>io.pixeloutlaw</groupId>
       <artifactId>facecore</artifactId>
-      <version>3.1.0-SNAPSHOT</version>
+      <version>1.14.4.1</version>
     </dependency>
     <dependency>
       <groupId>me.clip</groupId>
@@ -65,9 +61,16 @@
     <dependency>
       <groupId>craftbukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>1.14.1-R0.1-SNAPSHOT</version>
+      <version>1.14.3-R0.1-SNAPSHOT</version>
       <scope>system</scope>
       <systemPath>${basedir}/lib/craftbukkit.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>HeadDatabaseAPI</groupId>
+      <artifactId>HeadDatabaseAPI</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/HeadDatabaseAPI.jar</systemPath>
     </dependency>
   </dependencies>
 
