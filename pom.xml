@@ -28,7 +28,7 @@
   <parent>
     <groupId>io.pixeloutlaw</groupId>
     <artifactId>spigot-plugin-parent</artifactId>
-    <version>1.14.4.2</version>
+    <version>1.15.1.4</version>
   </parent>
 
   <artifactId>MiniInvyGui</artifactId>
@@ -50,7 +50,7 @@
     <dependency>
       <groupId>io.pixeloutlaw</groupId>
       <artifactId>facecore</artifactId>
-      <version>1.14.4.1</version>
+      <version>1.15.1.4</version>
     </dependency>
     <dependency>
       <groupId>me.clip</groupId>
@@ -61,9 +61,9 @@
     <dependency>
       <groupId>craftbukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>1.14.3-R0.1-SNAPSHOT</version>
+      <version>1.15.1-R0.1-SNAPSHOT.jar</version>
       <scope>system</scope>
-      <systemPath>${basedir}/lib/craftbukkit.jar</systemPath>
+      <systemPath>${basedir}/lib/craftbukkit-1.15.1-R0.1-SNAPSHOT.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>HeadDatabaseAPI</groupId>

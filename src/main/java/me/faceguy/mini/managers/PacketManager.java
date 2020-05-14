@@ -3,10 +3,10 @@ package me.faceguy.mini.managers;
 import io.pixeloutlaw.minecraft.spigot.hilt.ItemStackExtensionsKt;
 import java.util.List;
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.minecraft.server.v1_14_R1.PacketPlayOutSetSlot;
+import net.minecraft.server.v1_15_R1.PacketPlayOutSetSlot;
 import org.bukkit.GameMode;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
