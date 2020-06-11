@@ -23,11 +23,7 @@ public class ItemManager {
 
   public ItemManager(MiniInvyGui plugin) {
     this.plugin = plugin;
-    this.topLeft = generateItem("top-left");
-    this.topRight = generateItem("top-right");
-    this.bottomLeft = generateItem("bottom-left");
-    this.bottomRight = generateItem("bottom-right");
-    this.auxItem = generateItem("aux");
+    regenerateItems();
   }
 
   public InvyItem getTopLeft() {
@@ -50,6 +46,14 @@ public class ItemManager {
     return auxItem;
   }
 
+  public void regenerateItems() {
+    topLeft = generateItem("top-left");
+    topRight = generateItem("top-right");
+    bottomLeft = generateItem("bottom-left");
+    bottomRight = generateItem("bottom-right");
+    auxItem = generateItem("aux");
+  }
+
   private InvyItem generateItem(String itemIdentifier) {
     String headString = plugin.getSettings().getString("config.icons." + itemIdentifier + ".head");
     ItemStack item;
@@ -62,6 +66,9 @@ public class ItemManager {
         item = MiniInvyGui.HEAD_API.getRandomHead();
         Bukkit.getLogger().info(" - Head not found. Using random head");
       }
+      if (item == null) {
+        item = new ItemStack(Material.PLAYER_HEAD);
+      }
     } else {
       Material material = Material
           .valueOf(plugin.getSettings().getString("config.icons." + itemIdentifier + ".icon"));
@@ -71,6 +78,12 @@ public class ItemManager {
     }
     ItemStackExtensionsKt.setDisplayName(item, TextUtils
         .color(plugin.getSettings().getString("config.icons." + itemIdentifier + ".name")));
+
+    int customData = plugin.getSettings()
+        .getInt("config.icons." + itemIdentifier + ".custom-data", 0);
+    if (customData != 0) {
+      ItemStackExtensionsKt.setCustomModelData(item, customData);
+    }
 
     List<String> lore = TextUtils
         .color(plugin.getSettings().getStringList("config.icons." + itemIdentifier + ".lore"));

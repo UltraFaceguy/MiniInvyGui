@@ -8,6 +8,7 @@ import java.io.File;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.faceguy.mini.commands.MiniCommand;
 import me.faceguy.mini.listeners.GameModeListener;
+import me.faceguy.mini.listeners.HeadLoadListener;
 import me.faceguy.mini.listeners.IconActionListener;
 import me.faceguy.mini.listeners.IconClickListener;
 import me.faceguy.mini.managers.ItemManager;
@@ -61,6 +62,9 @@ public class MiniInvyGui extends FacePlugin {
     Bukkit.getPluginManager().registerEvents(new IconActionListener(this), this);
     Bukkit.getPluginManager().registerEvents(new IconClickListener(this), this);
     Bukkit.getPluginManager().registerEvents(new GameModeListener(this), this);
+    if (Bukkit.getPluginManager().getPlugin("HeadDatabase") != null) {
+      Bukkit.getPluginManager().registerEvents(new HeadLoadListener(this), this);
+    }
   }
 
   @Override
