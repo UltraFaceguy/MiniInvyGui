@@ -1,7 +1,7 @@
 name: MiniInvyGui
 version: ${project.version}
 main: me.faceguy.mini.MiniInvyGui
-depend: [Facecore, PlaceholderAPI]
+depend: [Facecore, PlaceholderAPI, ProtocolLib]
 softdepend: [HeadDatabase]
 api-version: 1.14
 

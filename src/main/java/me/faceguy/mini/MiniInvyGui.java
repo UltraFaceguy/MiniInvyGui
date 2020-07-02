@@ -1,5 +1,7 @@
 package me.faceguy.mini;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.tealcube.minecraft.bukkit.facecore.plugin.FacePlugin;
 import io.pixeloutlaw.minecraft.spigot.config.MasterConfiguration;
 import io.pixeloutlaw.minecraft.spigot.config.VersionedConfiguration;
@@ -26,6 +28,7 @@ public class MiniInvyGui extends FacePlugin {
   private PacketManager packetManager;
   private IconPacketSendTask packetTask;
   private CommandHandler commandHandler;
+  private ProtocolManager protocolManager;
 
   public static HeadDatabaseAPI HEAD_API;
 
@@ -47,7 +50,8 @@ public class MiniInvyGui extends FacePlugin {
     }
 
     itemManager = new ItemManager(this);
-    packetManager = new PacketManager(itemManager);
+    protocolManager = ProtocolLibrary.getProtocolManager();
+    packetManager = new PacketManager(itemManager, getLogger(), protocolManager);
 
     packetTask = new IconPacketSendTask(this);
 
