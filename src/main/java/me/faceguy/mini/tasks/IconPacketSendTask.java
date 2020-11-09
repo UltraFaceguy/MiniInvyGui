@@ -7,7 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class IconPacketSendTask extends BukkitRunnable {
 
-  private MiniInvyGui plugin;
+  private final MiniInvyGui plugin;
 
   public IconPacketSendTask(MiniInvyGui plugin) {
     this.plugin = plugin;

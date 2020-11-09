@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 
 public class GameModeListener implements Listener {
 
-  private MiniInvyGui plugin;
+  private final MiniInvyGui plugin;
 
   public GameModeListener(MiniInvyGui plugin) {
     this.plugin = plugin;

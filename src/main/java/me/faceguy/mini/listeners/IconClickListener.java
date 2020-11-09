@@ -13,7 +13,7 @@ import org.bukkit.event.inventory.InventoryType;
 
 public class IconClickListener implements Listener {
 
-  private MiniInvyGui plugin;
+  private final MiniInvyGui plugin;
 
   public IconClickListener(MiniInvyGui plugin) {
     this.plugin = plugin;

@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class IconActionListener implements Listener {
 
-  private MiniInvyGui plugin;
+  private final MiniInvyGui plugin;
 
   public IconActionListener(MiniInvyGui plugin) {
     this.plugin = plugin;
@@ -60,8 +60,7 @@ public class IconActionListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onTeleport(final PlayerTeleportEvent event) {
-    if (event.getPlayer().hasMetadata("NPC")
-        || event.getPlayer().getGameMode() != GameMode.SURVIVAL) {
+    if (event.getPlayer().hasMetadata("NPC") || event.getPlayer().getGameMode() != GameMode.SURVIVAL) {
       return;
     }
     sendUpdate(event.getPlayer());
@@ -76,7 +75,6 @@ public class IconActionListener implements Listener {
   }
 
   private void sendUpdate(Player player) {
-    Bukkit.getScheduler().runTaskLater(plugin,
-        () -> plugin.getPacketManager().sendCraftGridPackets(player), 2L);
+    Bukkit.getScheduler().runTaskLater(plugin, () -> plugin.getPacketManager().sendCraftGridPackets(player), 2L);
   }
 }
