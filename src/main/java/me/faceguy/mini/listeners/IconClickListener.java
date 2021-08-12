@@ -18,13 +18,15 @@ public class IconClickListener implements Listener {
   public IconClickListener(MiniInvyGui plugin) {
     this.plugin = plugin;
   }
+
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onInvyClick(final InventoryClickEvent event) {
     if (event.getInventory().getType() != InventoryType.CRAFTING) {
       return;
     }
     Player player = (Player) event.getWhoClicked();
-    if (player.getGameMode() != GameMode.SURVIVAL) {
+    if (!(player.getGameMode() == GameMode.SURVIVAL
+        || player.getGameMode() == GameMode.ADVENTURE)) {
       return;
     }
     if (event.getRawSlot() > 4 || event.getRawSlot() < 0) {
@@ -71,6 +73,7 @@ public class IconClickListener implements Listener {
     if (item.getSoundEffect() == null) {
       return;
     }
-    player.playSound(player.getLocation(), item.getSoundEffect(), item.getSoundVolume(), item.getSoundPitch());
+    player.playSound(player.getLocation(), item.getSoundEffect(), item.getSoundVolume(),
+        item.getSoundPitch());
   }
 }

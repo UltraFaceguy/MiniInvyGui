@@ -2,19 +2,24 @@ package me.faceguy.mini.commands;
 
 import static com.tealcube.minecraft.bukkit.facecore.utilities.MessageUtils.sendMessage;
 
+import com.tealcube.minecraft.bukkit.shade.acf.BaseCommand;
+import com.tealcube.minecraft.bukkit.shade.acf.annotation.CommandAlias;
+import com.tealcube.minecraft.bukkit.shade.acf.annotation.CommandPermission;
+import com.tealcube.minecraft.bukkit.shade.acf.annotation.Subcommand;
 import me.faceguy.mini.MiniInvyGui;
 import org.bukkit.command.CommandSender;
-import se.ranzdo.bukkit.methodcommand.Command;
 
-public class MiniCommand {
+@CommandAlias("minigui")
+public class MiniCommand extends BaseCommand {
 
-  private MiniInvyGui plugin;
+  private final MiniInvyGui plugin;
 
   public MiniCommand(MiniInvyGui plugin) {
     this.plugin = plugin;
   }
 
-  @Command(identifier = "minigui reload", permissions = "mini.invy.admin", onlyPlayers = false)
+  @Subcommand("reload")
+  @CommandPermission("minigui.reload")
   public void reloadCommand(CommandSender sender) {
     plugin.disable();
     plugin.enable();

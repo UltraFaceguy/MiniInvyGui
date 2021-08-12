@@ -3,7 +3,7 @@ package me.faceguy.mini.managers;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
-import io.pixeloutlaw.minecraft.spigot.hilt.ItemStackExtensionsKt;
+import com.tealcube.minecraft.bukkit.facecore.utilities.TextUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.WeakHashMap;
@@ -31,17 +31,24 @@ public class PacketManager {
   }
 
   public void sendCraftGridPackets(Player player) {
-    if (!player.isOnline() || player.getGameMode() != GameMode.SURVIVAL) {
+    if (!player.isOnline() || !(player.getGameMode() == GameMode.SURVIVAL
+        || player.getGameMode() == GameMode.ADVENTURE)) {
       return;
     }
     try {
-      protocolManager.sendServerPacket(player, buildPacket(player, 1, itemManager.getTopLeft().getItemIcon()));
-      protocolManager.sendServerPacket(player, buildPacket(player, 2, itemManager.getTopRight().getItemIcon()));
-      protocolManager.sendServerPacket(player, buildPacket(player, 3, itemManager.getBottomLeft().getItemIcon()));
-      protocolManager.sendServerPacket(player, buildPacket(player, 4, itemManager.getBottomRight().getItemIcon()));
-      protocolManager.sendServerPacket(player, buildPacket(player, 0, itemManager.getAuxItem().getItemIcon()));
+      protocolManager
+          .sendServerPacket(player, buildPacket(player, 1, itemManager.getTopLeft().getItemIcon()));
+      protocolManager.sendServerPacket(player,
+          buildPacket(player, 2, itemManager.getTopRight().getItemIcon()));
+      protocolManager.sendServerPacket(player,
+          buildPacket(player, 3, itemManager.getBottomLeft().getItemIcon()));
+      protocolManager.sendServerPacket(player,
+          buildPacket(player, 4, itemManager.getBottomRight().getItemIcon()));
+      protocolManager
+          .sendServerPacket(player, buildPacket(player, 0, itemManager.getAuxItem().getItemIcon()));
     } catch (InvocationTargetException exception) {
-      logger.log(Level.WARNING, String.format("Unable to send craft grid packets to %s", player.getName()), exception);
+      logger.log(Level.WARNING,
+          String.format("Unable to send craft grid packets to %s", player.getName()), exception);
     }
   }
 
@@ -53,7 +60,8 @@ public class PacketManager {
       protocolManager.sendServerPacket(player, buildPacket(player, 4, null));
       protocolManager.sendServerPacket(player, buildPacket(player, 0, null));
     } catch (InvocationTargetException exception) {
-      logger.log(Level.WARNING, String.format("Unable to send craft grid packets to %s", player.getName()), exception);
+      logger.log(Level.WARNING,
+          String.format("Unable to send craft grid packets to %s", player.getName()), exception);
     }
   }
 
@@ -73,9 +81,9 @@ public class PacketManager {
           skullMap.put(player, sentStack.clone());
         }
       }
-      List<String> lore = ItemStackExtensionsKt.getLore(sentStack);
+      List<String> lore = TextUtils.getLore(sentStack);
       lore = PlaceholderAPI.setPlaceholders(player, lore);
-      ItemStackExtensionsKt.setLore(sentStack, lore);
+      TextUtils.setLore(sentStack, lore);
     }
     PacketContainer setSlotPacket = new PacketContainer(PacketType.Play.Server.SET_SLOT);
     setSlotPacket.getIntegers().write(0, 0);

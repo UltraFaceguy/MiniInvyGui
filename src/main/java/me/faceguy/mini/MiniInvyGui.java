@@ -3,6 +3,7 @@ package me.faceguy.mini;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.tealcube.minecraft.bukkit.facecore.plugin.FacePlugin;
+import com.tealcube.minecraft.bukkit.shade.acf.PaperCommandManager;
 import io.pixeloutlaw.minecraft.spigot.config.MasterConfiguration;
 import io.pixeloutlaw.minecraft.spigot.config.VersionedConfiguration;
 import io.pixeloutlaw.minecraft.spigot.config.VersionedSmartYamlConfiguration;
@@ -18,7 +19,6 @@ import me.faceguy.mini.tasks.IconPacketSendTask;
 import me.faceguy.mini.managers.PacketManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
-import se.ranzdo.bukkit.methodcommand.CommandHandler;
 
 public class MiniInvyGui extends FacePlugin {
 
@@ -27,7 +27,6 @@ public class MiniInvyGui extends FacePlugin {
   private ItemManager itemManager;
   private PacketManager packetManager;
   private IconPacketSendTask packetTask;
-  private CommandHandler commandHandler;
   private ProtocolManager protocolManager;
 
   public static HeadDatabaseAPI HEAD_API;
@@ -60,12 +59,13 @@ public class MiniInvyGui extends FacePlugin {
         20L * 5 // Run it every 5s after
     );
 
-    commandHandler = new CommandHandler(this);
-    commandHandler.registerCommands(new MiniCommand(this));
+    PaperCommandManager commandManager = new PaperCommandManager(this);
+    commandManager.registerCommand(new MiniCommand(this));
 
     Bukkit.getPluginManager().registerEvents(new IconActionListener(this), this);
     Bukkit.getPluginManager().registerEvents(new IconClickListener(this), this);
     Bukkit.getPluginManager().registerEvents(new GameModeListener(this), this);
+
     if (Bukkit.getPluginManager().getPlugin("HeadDatabase") != null) {
       Bukkit.getPluginManager().registerEvents(new HeadLoadListener(this), this);
     }
@@ -79,7 +79,6 @@ public class MiniInvyGui extends FacePlugin {
     packetManager = null;
     packetTask = null;
     configYAML = null;
-    commandHandler = null;
   }
 
   public MasterConfiguration getSettings() {

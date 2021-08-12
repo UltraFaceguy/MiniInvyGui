@@ -1,5 +1,6 @@
 package me.faceguy.mini.managers;
 
+import com.tealcube.minecraft.bukkit.facecore.utilities.TextUtils;
 import com.tealcube.minecraft.bukkit.shade.apache.commons.lang3.StringUtils;
 import io.pixeloutlaw.minecraft.spigot.garbage.ListExtensionsKt;
 import io.pixeloutlaw.minecraft.spigot.garbage.StringExtensionsKt;
@@ -90,9 +91,8 @@ public class ItemManager {
 
     List<String> lore = ListExtensionsKt
         .chatColorize(plugin.getSettings().getStringList("config.icons." + itemIdentifier + ".lore"));
-    ItemStackExtensionsKt.setLore(item, lore);
-    ItemStackExtensionsKt.addItemFlags(item, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS,
-        ItemFlag.HIDE_POTION_EFFECTS);
+    TextUtils.setLore(item, lore);
+    item.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS);
 
     InvyItem invyItem = new InvyItem();
     invyItem.setItemIcon(item);

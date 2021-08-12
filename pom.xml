@@ -27,8 +27,8 @@
 
   <parent>
     <groupId>io.pixeloutlaw</groupId>
-    <artifactId>spigot-plugin-parent</artifactId>
-    <version>1.16.2.0</version>
+    <artifactId>generic-plugin-parent</artifactId>
+    <version>1.17.1.0</version>
   </parent>
 
   <artifactId>MiniInvyGui</artifactId>
@@ -41,8 +41,12 @@
 
   <repositories>
     <repository>
+      <id>space-faceland-maven</id>
+      <url>https://maven.pkg.jetbrains.space/faceland/p/fl/faceland-maven</url>
+    </repository>
+    <repository>
       <id>placeholderapi</id>
-      <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+      <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
     </repository>
     <repository>
       <id>dmulloy2-repo</id>
@@ -56,19 +60,19 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.spigotmc</groupId>
-      <artifactId>spigot-api</artifactId>
+      <groupId>io.pixeloutlaw</groupId>
+      <artifactId>facecore</artifactId>
+      <version>1.17.1.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>io.pixeloutlaw</groupId>
-      <artifactId>facecore</artifactId>
-      <version>1.16.2.10</version>
+      <groupId>io.papermc.paper</groupId>
+      <artifactId>paper-api</artifactId>
     </dependency>
     <dependency>
       <groupId>me.clip</groupId>
       <artifactId>placeholderapi</artifactId>
-      <version>2.10.9</version>
+      <version>2.10.10</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -108,7 +112,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.javaVersion>1.8</project.build.javaVersion>
+    <project.build.javaVersion>16</project.build.javaVersion>
   </properties>
 
 </project>
