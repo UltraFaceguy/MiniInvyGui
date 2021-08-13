@@ -87,7 +87,7 @@ public class PacketManager {
     }
     PacketContainer setSlotPacket = new PacketContainer(PacketType.Play.Server.SET_SLOT);
     setSlotPacket.getIntegers().write(0, 0);
-    setSlotPacket.getIntegers().write(1, slot);
+    setSlotPacket.getIntegers().write(2, slot);
     setSlotPacket.getItemModifier().write(0, sentStack);
     return setSlotPacket;
   }
