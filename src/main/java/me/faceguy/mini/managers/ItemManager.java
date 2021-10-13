@@ -13,7 +13,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 public class ItemManager {
 
@@ -27,6 +26,19 @@ public class ItemManager {
   public ItemManager(MiniInvyGui plugin) {
     this.plugin = plugin;
     regenerateItems();
+  }
+
+  public InvyItem getFromSlot(int slot) {
+    InvyItem returnVal;
+    switch (slot) {
+      case 0 -> returnVal = auxItem;
+      case 1 -> returnVal = topLeft;
+      case 2 -> returnVal = topRight;
+      case 3 -> returnVal = bottomLeft;
+      case 4 -> returnVal = bottomRight;
+      default -> returnVal = null;
+    }
+    return returnVal;
   }
 
   public InvyItem getTopLeft() {

@@ -5,9 +5,9 @@ icons:
     icon: APPLE
     quantity: 1
     name: '&csteel beams'
-    sound-effect: ENTITY_DANK_MEME
+    sound-effect: BLOCK_BELL_USE
     sound-volume: 1.0
-    sound-pitch: 1.0
+    sound-pitch: 0.1
     lore:
     - '&7jet fuel'
     - '&7can''t melt'

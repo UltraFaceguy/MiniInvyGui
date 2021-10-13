@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Nullable;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -30,65 +29,61 @@ public class PacketManager {
     this.logger = logger;
   }
 
+  private void sendPacket(Player player, PacketContainer container) {
+    try {
+      protocolManager.sendServerPacket(player, container);
+    } catch (InvocationTargetException exception) {
+      logger.log(Level.WARNING,
+              String.format("Unable to send craft grid packets to %s", player.getName()), exception);
+    }
+  }
+
   public void sendCraftGridPackets(Player player) {
     if (!player.isOnline() || !(player.getGameMode() == GameMode.SURVIVAL
-        || player.getGameMode() == GameMode.ADVENTURE)) {
+            || player.getGameMode() == GameMode.ADVENTURE)) {
       return;
     }
-    try {
-      protocolManager
-          .sendServerPacket(player, buildPacket(player, 1, itemManager.getTopLeft().getItemIcon()));
-      protocolManager.sendServerPacket(player,
-          buildPacket(player, 2, itemManager.getTopRight().getItemIcon()));
-      protocolManager.sendServerPacket(player,
-          buildPacket(player, 3, itemManager.getBottomLeft().getItemIcon()));
-      protocolManager.sendServerPacket(player,
-          buildPacket(player, 4, itemManager.getBottomRight().getItemIcon()));
-      protocolManager
-          .sendServerPacket(player, buildPacket(player, 0, itemManager.getAuxItem().getItemIcon()));
-    } catch (InvocationTargetException exception) {
-      logger.log(Level.WARNING,
-          String.format("Unable to send craft grid packets to %s", player.getName()), exception);
-    }
+    PacketContainer handle = protocolManager.createPacket(PacketType.Play.Server.WINDOW_ITEMS);
+    handle.getIntegers().write(0, 0);
+    sendPacket(player, handle);
   }
 
-  public void sendBlankGridPackets(Player player) {
-    try {
-      protocolManager.sendServerPacket(player, buildPacket(player, 1, null));
-      protocolManager.sendServerPacket(player, buildPacket(player, 2, null));
-      protocolManager.sendServerPacket(player, buildPacket(player, 3, null));
-      protocolManager.sendServerPacket(player, buildPacket(player, 4, null));
-      protocolManager.sendServerPacket(player, buildPacket(player, 0, null));
-    } catch (InvocationTargetException exception) {
-      logger.log(Level.WARNING,
-          String.format("Unable to send craft grid packets to %s", player.getName()), exception);
-    }
-  }
+  public void modifyPacket(Player player, PacketContainer handle) {
+    handle.getItemModifier().write(0, player.getItemOnCursor());
 
-  private PacketContainer buildPacket(Player player, int slot, @Nullable ItemStack stack) {
-    ItemStack sentStack = null;
-    if (stack != null) {
-      sentStack = stack.clone();
-      if (sentStack.getType() == Material.PLAYER_WALL_HEAD) {
-        if (skullMap.containsKey(player)) {
-          sentStack = skullMap.get(player).clone();
-        } else {
-          sentStack.setType(Material.PLAYER_HEAD);
-          SkullMeta meta = (SkullMeta) sentStack.getItemMeta();
-          assert meta != null;
-          meta.setOwningPlayer(player);
-          sentStack.setItemMeta(meta);
-          skullMap.put(player, sentStack.clone());
+    List<ItemStack> stackList = handle.getItemListModifier().read(0);
+    boolean empty = stackList.isEmpty();
+    for (int i = 0; i < 5; i++) {
+      ItemStack stack = itemManager.getFromSlot(i).getItemIcon();
+      if (stack != null) {
+        stack = stack.clone();
+        if (stack.getType() == Material.PLAYER_WALL_HEAD) {
+          if (skullMap.containsKey(player)) {
+            stack = skullMap.get(player).clone();
+          } else {
+            stack.setType(Material.PLAYER_HEAD);
+            SkullMeta meta = (SkullMeta) stack.getItemMeta();
+            assert meta != null;
+            meta.setOwningPlayer(player);
+            stack.setItemMeta(meta);
+            skullMap.put(player, stack.clone());
+          }
         }
+        List<String> lore = TextUtils.getLore(stack);
+        lore = PlaceholderAPI.setPlaceholders(player, lore);
+        TextUtils.setLore(stack, lore);
       }
-      List<String> lore = TextUtils.getLore(sentStack);
-      lore = PlaceholderAPI.setPlaceholders(player, lore);
-      TextUtils.setLore(sentStack, lore);
+      if (empty) stackList.add(stack);
+      else stackList.set(i, stack);
     }
-    PacketContainer setSlotPacket = new PacketContainer(PacketType.Play.Server.SET_SLOT);
-    setSlotPacket.getIntegers().write(0, 0);
-    setSlotPacket.getIntegers().write(2, slot);
-    setSlotPacket.getItemModifier().write(0, sentStack);
-    return setSlotPacket;
+    handle.getItemListModifier().write(0, stackList);
+  }
+
+  public void setCursorToAir(Player player) {
+    PacketContainer handle = protocolManager.createPacket(PacketType.Play.Server.SET_SLOT);
+    handle.getIntegers().write(0, -1);
+    handle.getIntegers().write(2, -1);
+    handle.getItemModifier().write(0, new ItemStack(Material.AIR));
+    sendPacket(player, handle);
   }
 }

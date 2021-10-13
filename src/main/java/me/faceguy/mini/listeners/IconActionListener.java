@@ -1,8 +1,10 @@
 package me.faceguy.mini.listeners;
 
 import me.faceguy.mini.MiniInvyGui;
+import me.faceguy.mini.managers.PacketManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,23 +12,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
-public class IconActionListener implements Listener {
-
-  private final MiniInvyGui plugin;
-
-  public IconActionListener(MiniInvyGui plugin) {
-    this.plugin = plugin;
-  }
+public record IconActionListener(MiniInvyGui plugin, PacketManager packetManager) implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onItemPickup(final EntityPickupItemEvent event) {
-    if (!(event.getEntity() instanceof Player)) {
-      return;
-    }
+    if (!(event.getEntity() instanceof Player)) return;
     sendUpdate((Player) event.getEntity());
   }
 
@@ -37,16 +34,28 @@ public class IconActionListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onInvyClose(final InventoryCloseEvent event) {
-    sendUpdate((Player) event.getPlayer());
+    Player player = (Player) event.getPlayer();
+    player.updateInventory();
+    packetManager.sendCraftGridPackets(player);
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onInvyClick(final InventoryClickEvent event) {
-    if (!(event.getInventory().getHolder() instanceof Player)) {
-      return;
-    }
-    Player player = (Player) event.getInventory().getHolder();
-    sendUpdate(player);
+    if (event.getWhoClicked().getGameMode() == GameMode.CREATIVE) return;
+    if (event.getInventory().getType() != InventoryType.CRAFTING) return;
+    if (event.getRawSlot() > -1 && event.getRawSlot() < 5) event.setCancelled(true);
+    new BukkitRunnable() {
+      @Override
+      public void run() {
+        Player observer = (Player) event.getWhoClicked();
+        observer.updateInventory();
+        packetManager.sendCraftGridPackets(observer);
+        ItemStack cursor = event.getCursor();
+        if ((event.getRawSlot() > -1 && event.getRawSlot() < 5) && cursor != null && cursor.getType() == Material.AIR) {
+          packetManager.setCursorToAir(observer);
+        }
+      }
+    }.runTaskLater(plugin, 1L);
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
@@ -64,10 +73,10 @@ public class IconActionListener implements Listener {
       return;
     }
     if (!(player.getGameMode() == GameMode.SURVIVAL
-        || player.getGameMode() == GameMode.ADVENTURE)) {
+            || player.getGameMode() == GameMode.ADVENTURE)) {
       return;
     }
     Bukkit.getScheduler()
-        .runTaskLater(plugin, () -> plugin.getPacketManager().sendCraftGridPackets(player), 2L);
+            .runTaskLater(plugin, () -> plugin.getPacketManager().sendCraftGridPackets(player), 2L);
   }
 }

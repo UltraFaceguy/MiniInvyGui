@@ -10,13 +10,13 @@ import io.pixeloutlaw.minecraft.spigot.config.VersionedSmartYamlConfiguration;
 import java.io.File;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.faceguy.mini.commands.MiniCommand;
-import me.faceguy.mini.listeners.GameModeListener;
 import me.faceguy.mini.listeners.HeadLoadListener;
 import me.faceguy.mini.listeners.IconActionListener;
 import me.faceguy.mini.listeners.IconClickListener;
+import me.faceguy.mini.listeners.InventoryPacketListener;
 import me.faceguy.mini.managers.ItemManager;
-import me.faceguy.mini.tasks.IconPacketSendTask;
 import me.faceguy.mini.managers.PacketManager;
+import me.faceguy.mini.tasks.IconUpdateTask;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 
@@ -26,7 +26,7 @@ public class MiniInvyGui extends FacePlugin {
   private VersionedSmartYamlConfiguration configYAML;
   private ItemManager itemManager;
   private PacketManager packetManager;
-  private IconPacketSendTask packetTask;
+  private IconUpdateTask updateTask;
   private ProtocolManager protocolManager;
 
   public static HeadDatabaseAPI HEAD_API;
@@ -52,9 +52,9 @@ public class MiniInvyGui extends FacePlugin {
     protocolManager = ProtocolLibrary.getProtocolManager();
     packetManager = new PacketManager(itemManager, getLogger(), protocolManager);
 
-    packetTask = new IconPacketSendTask(this);
+    updateTask = new IconUpdateTask(this);
 
-    packetTask.runTaskTimer(this,
+    updateTask.runTaskTimer(this,
         20L * 10, // Start timer after 10s
         20L * 5 // Run it every 5s after
     );
@@ -62,9 +62,9 @@ public class MiniInvyGui extends FacePlugin {
     PaperCommandManager commandManager = new PaperCommandManager(this);
     commandManager.registerCommand(new MiniCommand(this));
 
-    Bukkit.getPluginManager().registerEvents(new IconActionListener(this), this);
+    Bukkit.getPluginManager().registerEvents(new IconActionListener(this, packetManager), this);
     Bukkit.getPluginManager().registerEvents(new IconClickListener(this), this);
-    Bukkit.getPluginManager().registerEvents(new GameModeListener(this), this);
+    new InventoryPacketListener(this, packetManager, protocolManager);
 
     if (Bukkit.getPluginManager().getPlugin("HeadDatabase") != null) {
       Bukkit.getPluginManager().registerEvents(new HeadLoadListener(this), this);
@@ -77,7 +77,7 @@ public class MiniInvyGui extends FacePlugin {
     settings = null;
     itemManager = null;
     packetManager = null;
-    packetTask = null;
+    updateTask = null;
     configYAML = null;
   }
 
