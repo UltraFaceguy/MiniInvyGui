@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.tealcube.minecraft.bukkit.facecore.utilities.TextUtils;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
@@ -84,6 +85,17 @@ public class PacketManager {
     handle.getIntegers().write(0, -1);
     handle.getIntegers().write(2, -1);
     handle.getItemModifier().write(0, new ItemStack(Material.AIR));
+    sendPacket(player, handle);
+  }
+
+  public void setCraftGridToAir(Player player) {
+    ItemStack air = new ItemStack(Material.AIR);
+
+    ArrayList<ItemStack> stackArrayList = new ArrayList<>();
+    for (int i = 0; i < 5; i++) stackArrayList.add(air);
+
+    PacketContainer handle = protocolManager.createPacket(PacketType.Play.Server.WINDOW_ITEMS);
+    handle.getItemListModifier().write(0, stackArrayList);
     sendPacket(player, handle);
   }
 }

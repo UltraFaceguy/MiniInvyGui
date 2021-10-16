@@ -10,10 +10,7 @@ import io.pixeloutlaw.minecraft.spigot.config.VersionedSmartYamlConfiguration;
 import java.io.File;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.faceguy.mini.commands.MiniCommand;
-import me.faceguy.mini.listeners.HeadLoadListener;
-import me.faceguy.mini.listeners.IconActionListener;
-import me.faceguy.mini.listeners.IconClickListener;
-import me.faceguy.mini.listeners.InventoryPacketListener;
+import me.faceguy.mini.listeners.*;
 import me.faceguy.mini.managers.ItemManager;
 import me.faceguy.mini.managers.PacketManager;
 import me.faceguy.mini.tasks.IconUpdateTask;
@@ -64,6 +61,7 @@ public class MiniInvyGui extends FacePlugin {
 
     Bukkit.getPluginManager().registerEvents(new IconActionListener(this, packetManager), this);
     Bukkit.getPluginManager().registerEvents(new IconClickListener(this), this);
+    Bukkit.getPluginManager().registerEvents(new GameModeListener(this, packetManager), this);
     new InventoryPacketListener(this, packetManager, protocolManager);
 
     if (Bukkit.getPluginManager().getPlugin("HeadDatabase") != null) {
