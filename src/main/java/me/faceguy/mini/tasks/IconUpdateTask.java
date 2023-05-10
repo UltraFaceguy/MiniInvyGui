@@ -7,16 +7,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class IconUpdateTask extends BukkitRunnable {
 
-    private final MiniInvyGui plugin;
+  private final MiniInvyGui plugin;
 
-    public IconUpdateTask(MiniInvyGui plugin) {
-        this.plugin = plugin;
-    }
+  public IconUpdateTask(MiniInvyGui plugin) {
+    this.plugin = plugin;
+  }
 
-    @Override
-    public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            plugin.getPacketManager().sendCraftGridPackets(player);
-        }
+  @Override
+  public void run() {
+    for (Player player : Bukkit.getOnlinePlayers()) {
+      //plugin.getPacketManager().sendCraftGridPackets(player);
     }
+  }
 }

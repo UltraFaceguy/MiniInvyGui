@@ -8,28 +8,32 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent.Cause;
+import org.bukkit.inventory.Inventory;
 
 public class GameModeListener implements Listener {
 
-    private final MiniInvyGui plugin;
-    private final PacketManager packetManager;
+  private final MiniInvyGui plugin;
+  private final PacketManager packetManager;
 
-    public GameModeListener(MiniInvyGui plugin, PacketManager packetManager) {
-        this.plugin = plugin;
-        this.packetManager = packetManager;
+  public GameModeListener(MiniInvyGui plugin, PacketManager packetManager) {
+    this.plugin = plugin;
+    this.packetManager = packetManager;
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onCraftOpen(final InventoryOpenEvent event) {
+    if (event.isCancelled() || event.getInventory().getType() != InventoryType.WORKBENCH) {
+      return;
     }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onGameModeChange(final PlayerGameModeChangeEvent event) {
-        GameMode gameMode = event.getNewGameMode();
-        Player player = event.getPlayer();
-
-        if (gameMode == GameMode.CREATIVE) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> packetManager.setCraftGridToAir(player), 1L);
-        }
-        else if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> packetManager.sendCraftGridPackets(player), 1L);
-        }
+    if (event.getInventory().getLocation() == null) {
+      return;
     }
+    event.setCancelled(true);
+    Inventory inv = Bukkit.createInventory(event.getPlayer(), InventoryType.WORKBENCH, "");
+    event.getPlayer().openInventory(inv);
+  }
 }

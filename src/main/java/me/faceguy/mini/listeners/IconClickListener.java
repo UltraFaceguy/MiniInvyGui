@@ -30,7 +30,7 @@ public class IconClickListener implements Listener {
       return;
     }
     if (event.getRawSlot() > 4 || event.getRawSlot() < 0) {
-      plugin.getPacketManager().sendCraftGridPackets(player);
+      //plugin.getPacketManager().sendCraftGridPackets(player);
       return;
     }
     event.setCancelled(true);
@@ -63,8 +63,6 @@ public class IconClickListener implements Listener {
       }
       default -> plugin.getLogger().warning("Something is VERY wrong??");
     }
-    Bukkit.getScheduler().runTaskLater(plugin,
-        () -> plugin.getPacketManager().sendCraftGridPackets(player), 2L);
   }
 
   private void playButtonSound(Player player, InvyItem item) {

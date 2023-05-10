@@ -13,7 +13,6 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
@@ -35,20 +34,20 @@ public record IconActionListener(MiniInvyGui plugin, PacketManager packetManager
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onInvyClose(final InventoryCloseEvent event) {
     Player player = (Player) event.getPlayer();
-    player.updateInventory();
-    packetManager.sendCraftGridPackets(player);
+    sendUpdate(player);
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onInvyClick(final InventoryClickEvent event) {
-    if (event.getWhoClicked().getGameMode() == GameMode.CREATIVE) return;
-    if (event.getInventory().getType() != InventoryType.CRAFTING) return;
+    if (!(event.getInventory().getType() == InventoryType.CRAFTING
+        || event.getInventory().getType() == InventoryType.CREATIVE)) {
+      return;
+    }
     if (event.getRawSlot() > -1 && event.getRawSlot() < 5) event.setCancelled(true);
     new BukkitRunnable() {
       @Override
       public void run() {
         Player observer = (Player) event.getWhoClicked();
-        observer.updateInventory();
         packetManager.sendCraftGridPackets(observer);
         ItemStack cursor = event.getCursor();
         if ((event.getRawSlot() > -1 && event.getRawSlot() < 5) && cursor != null && cursor.getType() == Material.AIR) {
@@ -63,20 +62,11 @@ public record IconActionListener(MiniInvyGui plugin, PacketManager packetManager
     sendUpdate(event.getPlayer());
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST)
-  public void onJoin(final PlayerJoinEvent event) {
-    sendUpdate(event.getPlayer());
-  }
-
   private void sendUpdate(Player player) {
     if (player.hasMetadata("NPC")) {
       return;
     }
-    if (!(player.getGameMode() == GameMode.SURVIVAL
-            || player.getGameMode() == GameMode.ADVENTURE)) {
-      return;
-    }
-    Bukkit.getScheduler()
-            .runTaskLater(plugin, () -> plugin.getPacketManager().sendCraftGridPackets(player), 2L);
+    //Bukkit.getScheduler().runTaskLater(plugin, () ->
+    //    plugin.getPacketManager().sendCraftGridPackets(player), 5L);
   }
 }
