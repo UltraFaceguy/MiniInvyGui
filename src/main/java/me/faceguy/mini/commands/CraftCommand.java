@@ -4,10 +4,9 @@ import com.tealcube.minecraft.bukkit.shade.acf.BaseCommand;
 import com.tealcube.minecraft.bukkit.shade.acf.annotation.CommandAlias;
 import com.tealcube.minecraft.bukkit.shade.acf.annotation.Default;
 import me.faceguy.mini.MiniInvyGui;
-import org.bukkit.Bukkit;
+import me.faceguy.mini.listeners.IconClickListener;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 
 @CommandAlias("craft")
 public class CraftCommand extends BaseCommand {
@@ -19,8 +18,10 @@ public class CraftCommand extends BaseCommand {
   }
 
   @Default()
-  public void reloadCommand(Player player) {
-    Inventory inv = Bukkit.createInventory(player, InventoryType.WORKBENCH, "");
-    player.openInventory(inv);
+  public void craftCommand(Player player) {
+    IconClickListener.ignoreCraft.add(player.getUniqueId());
+    InventoryView view = player.getPlayer().openWorkbench(player.getLocation(), true);
+    view.setTitle("");
+    IconClickListener.ignoreCraft.remove(player.getUniqueId());
   }
 }

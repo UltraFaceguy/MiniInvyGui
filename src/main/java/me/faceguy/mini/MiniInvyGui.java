@@ -25,9 +25,10 @@ public class MiniInvyGui extends FacePlugin {
   private VersionedSmartYamlConfiguration configYAML;
   @Getter
   private ItemManager itemManager;
-  //private PacketManager packetManager;
-  //private IconUpdateTask updateTask;
-  //private ProtocolManager protocolManager;
+  @Getter
+  private PacketManager packetManager;
+  private IconUpdateTask updateTask;
+  private ProtocolManager protocolManager;
 
   public static HeadDatabaseAPI HEAD_API;
 
@@ -49,26 +50,23 @@ public class MiniInvyGui extends FacePlugin {
     }
 
     itemManager = new ItemManager(this);
-    // protocolManager = ProtocolLibrary.getProtocolManager();
-    // packetManager = new PacketManager(itemManager, getLogger(), protocolManager);
+    protocolManager = ProtocolLibrary.getProtocolManager();
+    packetManager = new PacketManager(itemManager, getLogger(), protocolManager);
 
-    /*
     updateTask = new IconUpdateTask(this);
-
     updateTask.runTaskTimer(this,
         20L * 10, // Start timer after 10s
         20L * 5 // Run it every 5s after
     );
-    */
 
     PaperCommandManager commandManager = new PaperCommandManager(this);
     commandManager.registerCommand(new MiniCommand(this));
     commandManager.registerCommand(new CraftCommand(this));
 
-    //Bukkit.getPluginManager().registerEvents(new IconActionListener(this, packetManager), this);
+    Bukkit.getPluginManager().registerEvents(new IconActionListener(this, packetManager), this);
     Bukkit.getPluginManager().registerEvents(new IconClickListener(this), this);
-    //Bukkit.getPluginManager().registerEvents(new GameModeListener(this, packetManager), this);
-    //new InventoryPacketListener(this, packetManager, protocolManager);
+    Bukkit.getPluginManager().registerEvents(new GameModeListener(this, packetManager), this);
+    new InventoryPacketListener(this, packetManager, protocolManager);
 
     /*
     if (Bukkit.getPluginManager().getPlugin("HeadDatabase") != null) {
@@ -80,11 +78,11 @@ public class MiniInvyGui extends FacePlugin {
   @Override
   public void disable() {
     HandlerList.unregisterAll(this);
-    //protocolManager.removePacketListeners(this);
+    protocolManager.removePacketListeners(this);
     settings = null;
-    //itemManager = null;
-    //packetManager = null;
-    //updateTask = null;
+    itemManager = null;
+    packetManager = null;
+    updateTask = null;
     configYAML = null;
   }
 

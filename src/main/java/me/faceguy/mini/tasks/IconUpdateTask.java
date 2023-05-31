@@ -16,7 +16,7 @@ public class IconUpdateTask extends BukkitRunnable {
   @Override
   public void run() {
     for (Player player : Bukkit.getOnlinePlayers()) {
-      //plugin.getPacketManager().sendCraftGridPackets(player);
+      plugin.getPacketManager().sendCraftGridPackets(player);
     }
   }
 }

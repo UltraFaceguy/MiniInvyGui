@@ -50,21 +50,29 @@ public class PacketManager {
   }
 
   private void sendGrid(Player player) {
-    PacketContainer handle = protocolManager.createPacket(PacketType.Play.Server.WINDOW_ITEMS);
-    handle.getIntegers().write(0, 0);
-    sendPacket(player, handle);
-    sendCursor(player);
+    try {
+      PacketContainer handle = protocolManager.createPacket(PacketType.Play.Server.WINDOW_ITEMS);
+      handle.getIntegers().write(0, 0);
+      sendPacket(player, handle);
+      sendCursor(player);
+    } catch (Exception ignored) {
+
+    }
   }
 
-  private void sendAir(Player player) {
+  public void sendAir(Player player) {
     ItemStack air = new ItemStack(Material.AIR);
     ArrayList<ItemStack> stackArrayList = new ArrayList<>();
     for (int i = 0; i < 5; i++) {
       stackArrayList.add(air);
     }
-    PacketContainer handle = protocolManager.createPacket(PacketType.Play.Server.WINDOW_ITEMS);
-    handle.getItemListModifier().write(0, stackArrayList);
-    sendPacket(player, handle);
+    try {
+      PacketContainer handle = protocolManager.createPacket(PacketType.Play.Server.WINDOW_ITEMS);
+      handle.getItemListModifier().write(0, stackArrayList);
+      sendPacket(player, handle);
+    } catch (Exception ignored) {
+
+    }
   }
 
   private void sendCursor(Player player) {

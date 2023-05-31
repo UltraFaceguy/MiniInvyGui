@@ -1,5 +1,8 @@
 package me.faceguy.mini.listeners;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import me.faceguy.mini.MiniInvyGui;
 import me.faceguy.mini.objects.InvyItem;
 import org.bukkit.Bukkit;
@@ -9,14 +12,33 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 
 public class IconClickListener implements Listener {
 
   private final MiniInvyGui plugin;
+  public final static Set<UUID> ignoreCraft = new HashSet<>();
 
   public IconClickListener(MiniInvyGui plugin) {
     this.plugin = plugin;
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onCraftOpen(final InventoryOpenEvent event) {
+    if (event.isCancelled() || event.getInventory().getType() != InventoryType.WORKBENCH) {
+      return;
+    }
+    if (ignoreCraft.contains(event.getPlayer().getUniqueId())) {
+      return;
+    }
+    event.setCancelled(true);
+    ignoreCraft.add(event.getPlayer().getUniqueId());
+    InventoryView view = event.getPlayer().openWorkbench(event.getPlayer().getLocation(), true);
+    view.setTitle("");
+    ignoreCraft.remove(event.getPlayer().getUniqueId());
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
